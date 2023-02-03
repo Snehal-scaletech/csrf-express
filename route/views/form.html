@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <title>Form Submit with FormData Example</title>
+    <link rel="shortcut icon" href="#">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> 
+    
+<body>
+    <h1><%= title %></h1>
+    <form action="/process" method="POST">
+        <!-- <input type="hidden" name="_csrf" value="<%= csrfToken %>" id="csrf"> -->
+        <input type="text" name="title" id="title"/><br/><br/>
+        <input type="text" name="desc" id="desc"/><br/><br/>
+        <button type="submit">Submit</button>
+    </form>
+    <script>
+        $(document).ready(function () {
+            let token = '<%= csrfToken %>';
+            console.log("token",token);
+            $("form").submit(function (event) {
+                event.preventDefault();
+                var formData = {
+                name: $("#title").val(),
+                email: $("#desc").val(),
+                _csrf: token
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/process",
+                    data: formData,
+                    dataType: "json",
+                    encode: true,
+                    success: function(data, textStatus, jqXHR) {
+                        alert('Successfully Done...');
+                        window.location.href = '/';
+                    },
+                    error: function(error){
+                        alert(JSON.stringify(error));
+                    }
+                })
+            });
+        });
+
+    </script>
+</body>
+</html>
